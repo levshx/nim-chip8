@@ -1,5 +1,3 @@
-import bitOps
-
 proc disassemble*(opcode: uint16): (Instruction, seq[uint16]) =
     let instruction = INSTRUCTION_SET.filter(proc(instr: Instruction): bool = opcode.masked(instr.mask) == instr.pattern)[0]
     var args = instruction.arguments.map(proc (arg: Argument): uint16  = (opcode.masked(arg.mask) shr arg.shift).uint16)

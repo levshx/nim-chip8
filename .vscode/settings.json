@@ -1,0 +1,4 @@
+{    
+    "nim.project": ["main.nim"],
+    "nim.licenseString": "# MIT.\n\n"
+}
