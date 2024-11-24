@@ -87,9 +87,6 @@ proc main() =
     igGlfwNewFrame() 
     igNewFrame()  
 
-    if work == true:
-      cpu.step()
-
     glClear(GL_COLOR_BUFFER_BIT)  
     #work = false   
     igSetNextWindowPos(ImVec2(x: 1, y: 26))
@@ -121,43 +118,74 @@ proc main() =
     igText("BUTTONS PAD")
     igSeparator()
 
-
-    if igButton("1"): 
+    
+    igButton("1")
+    if igIsItemActive(): 
       keys.setBit(1)
     igSameLine()
-    if igButton("2"): keys.setBit(2)
+    igButton("2")
+    if igIsItemActive(): 
+      keys.setBit(2)
     igSameLine()
-    if igButton("3"): keys.setBit(3)
+    igButton("3")
+    if igIsItemActive(): 
+      keys.setBit(3)
     igSameLine()
-    if igButton("C"): keys.setBit(12)
+    igButton("C")
+    if igIsItemActive(): 
+      keys.setBit(12)
 
 
     
-    if igButton("4"): keys.setBit(4)
+    igButton("4")
+    if igIsItemActive(): 
+      keys.setBit(4)
     igSameLine()
-    if igButton("5"): keys.setBit(5)
+    igButton("5")
+    if igIsItemActive(): 
+      keys.setBit(5)
     igSameLine()
-    if igButton("6"): keys.setBit(6)
+    igButton("6")
+    if igIsItemActive(): 
+      keys.setBit(6)
     igSameLine()
-    if igButton("D"): keys.setBit(13)
+    igButton("D")
+    if igIsItemActive(): 
+      keys.setBit(13)
 
 
-    if igButton("7"): keys.setBit(7)
+    igButton("7")
+    if igIsItemActive(): 
+      keys.setBit(7)
     igSameLine()
-    if igButton("8"): keys.setBit(8)
+    igButton("8")
+    if igIsItemActive(): 
+      keys.setBit(8)
     igSameLine()
-    if igButton("9"): keys.setBit(9)
+    igButton("9")
+    if igIsItemActive(): 
+      keys.setBit(9)
     igSameLine()
-    if igButton("E"): keys.setBit(14)
+    igButton("E")
+    if igIsItemActive(): 
+      keys.setBit(14)
 
     
-    if igButton("A"): keys.setBit(10)
+    igButton("A")
+    if igIsItemActive(): 
+      keys.setBit(10)
     igSameLine()
-    if igButton("0") or (window.getKey(GLFWKey.Kp0)>0): keys.setBit(0)
+    igButton("0")
+    if igIsItemActive(): 
+      keys.setBit(0)
     igSameLine()
-    if igButton("B"): keys.setBit(11)
+    igButton("B")
+    if igIsItemActive(): 
+      keys.setBit(11)
     igSameLine()
-    if igButton("F"): keys.setBit(15)
+    igButton("F")
+    if igIsItemActive(): 
+      keys.setBit(15)
 
   
 
@@ -208,6 +236,8 @@ proc main() =
     window.swapBuffers()
     
     glfwPollEvents()
+    if work == true:
+      cpu.step()
 
   igOpenGL3Shutdown()
   igGlfwShutdown()
