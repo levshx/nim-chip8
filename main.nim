@@ -1,7 +1,7 @@
 import imgui, imgui/[impl_opengl, impl_glfw]
 import nimgl/[opengl, glfw], glm
 import sequtils, os, strutils
-import stb_image-Nim/stb_image/read as stbi
+import vendor_stb_image/stb_image/read as stbi
 
 proc screenReset*();
 proc setPixel*(x,y, value:int):bool;
