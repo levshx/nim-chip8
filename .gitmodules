@@ -1,3 +1,0 @@
-[submodule "vendor_stb_image"]
-	path = vendor_stb_image
-	url = https://github.com/define-private-public/stb_image-Nim.git

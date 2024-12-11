@@ -1,6 +1,5 @@
 import instructions
 import random
-import bitOps
 
 include extAPI, disassembler
 
@@ -34,10 +33,10 @@ type Cpu = object
     `interface`: ExtAPI
     memory*: array[4096, uint8]
     registers*: array[16, uint8]
-    stack*: array[16, uint16]
+    stack*: array[16, uint16] # Stack points
     ST*: uint8 # Sound Timer
     DT*: uint8 # Delay Timer
-    SP*: int
+    SP*: int # CURRENT STACK POINTER (stack[SP])
     PC*: uint16 # POINT CURSOR on opcode
     I*: uint16
     halted*: bool
@@ -243,6 +242,7 @@ proc execute(this: var Cpu, instruction: (Instruction, seq[uint16])) =
         this.registers[args[0]] = random and args[1].uint8
         this.nextInstruction()
     of "DRW_VX_VY_N":
+        # Интерпретатор считывает n байт из памяти, начиная с адреса в I
         # Dxyn - Display n-byte sprite starting at memory location I at (Vx, Vy), set VF = collision
         if (this.I > 4095 - args[2]):
             this.halted = true

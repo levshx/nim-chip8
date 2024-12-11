@@ -1,7 +1,7 @@
 import imgui, imgui/[impl_opengl, impl_glfw]
-import nimgl/[opengl, glfw], glm
+import nimgl/[opengl, glfw]
 import sequtils, os, strutils
-import vendor_stb_image/stb_image/read as stbi
+import std/bitops, times
 
 proc screenReset*();
 proc setPixel*(x,y, value:int):bool;
@@ -12,6 +12,7 @@ var
   str_ram_sec2*: string = """"""
   PC*: ptr int
   keys*: uint16 = 0
+  timerLastTimeClear* = now().utc
 
 include src/cpu
 include src/instructions
@@ -39,14 +40,26 @@ proc screenInit*()=
 proc screenReset*() = screenInit()    
 
 proc setPixel*(x,y, value:int): bool =
-  if ((screenMap[y][x]==true) and value==1):
+  if (x>63 or x<0 or y>31 or y<0):
+    echo "Set PIXEL ERROR: setPixel(", x, ",", y, ")" 
+
+  # If collision, will return true
+  let col = screenMap[y][x] and (value).bool
+  # Will XOR value to position x, y
+  screenMap[y][x] = (cast[uint8](screenMap[y][x]) xor cast[uint8](value)).bool
+  if col: 
     result = true
-  screenMap[y][x] = if value>0: true else: false
+  else: 
+    result = false
 
 proc main() =
   for i in roms:
     romsStrings.add(i[1])
   screenInit()
+  glVersionMajor = 4
+  glVersionMinor = 3
+  glfwWindowHint(GLFWContextVersionMajor, 4)
+  glfwWindowHint(GLFWContextVersionMinor, 3)
   assert glfwInit()
   
   var window: GLFWWindow = glfwCreateWindow(1280, 720, "CHIP 8 EMULATOR")
@@ -238,6 +251,13 @@ proc main() =
     glfwPollEvents()
     if work == true:
       cpu.step()
+      
+    
+    let tempNow = now()
+    if ((tempNow - timerLastTimeClear).inMilliseconds > 16):
+      timerLastTimeClear = tempNow
+      if (cpu.ST > 0): cpu.ST-=1
+      if (cpu.DT > 0): cpu.DT-=1
 
   igOpenGL3Shutdown()
   igGlfwShutdown()
